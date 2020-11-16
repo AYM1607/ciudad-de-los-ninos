@@ -5,6 +5,8 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import firebase from "firebase";
 
+import "rsuite/dist/styles/rsuite-default.css";
+
 firebase.initializeApp({
   apiKey: "AIzaSyD9L_NZwSg7bP0glGZtUZqvCJ_cuMEyQRo",
   authDomain: "ciudad-de-los-ninos.firebaseapp.com",

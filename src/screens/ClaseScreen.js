@@ -11,7 +11,7 @@ export default function ClaseScreen(_) {
   const [materia, setMateria] = useState(null);
   const [attendances, setAttendances] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLinkModalOpen, setIsLinkModalOpen] = useState(true);
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const match = useRouteMatch();
 
   const { materiaId, claseName } = match.params;

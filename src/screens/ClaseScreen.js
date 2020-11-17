@@ -69,9 +69,8 @@ export default function ClaseScreen(_) {
   };
 
   const constructAttendanceLink = () => {
-    return new URL(
-      `https://unruffled-hamilton-b133c3.netlify.app/asistencia?materia=${materiaId}&clase=${claseName}`
-    ).toString();
+    const url = `https://unruffled-hamilton-b133c3.netlify.app/asistencia/${materiaId}/${claseName}`;
+    return new URL(url).toString();
   };
 
   const renderAttendanceCards = () => {

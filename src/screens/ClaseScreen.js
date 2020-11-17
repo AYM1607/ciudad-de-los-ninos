@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom";
 import { Button, FlexboxGrid, Input, Loader, Modal } from "rsuite";
 import AttendanceCard from "../components/AttendanceCard";
@@ -16,21 +16,24 @@ export default function ClaseScreen(_) {
 
   const { materiaId, claseName } = match.params;
 
-  const updateMateria = (doc) => {
-    setMateria(doc.data());
+  const updateMateria = useCallback(
+    (doc) => {
+      setMateria(doc.data());
 
-    // Extract only the attendance for the current class.
-    const { attendance: newAttendances } = doc
-      .data()
-      .classes.find((clase) => clase.name === claseName);
+      // Extract only the attendance for the current class.
+      const { attendance: newAttendances } = doc
+        .data()
+        .classes.find((clase) => clase.name === claseName);
 
-    // Put the unverified attendances first.
-    newAttendances.sort((a, b) => {
-      return !b.verified && a.verified ? 1 : -1;
-    });
+      // Put the unverified attendances first.
+      newAttendances.sort((a, b) => {
+        return !b.verified && a.verified ? 1 : -1;
+      });
 
-    setAttendances(newAttendances);
-  };
+      setAttendances(newAttendances);
+    },
+    [claseName]
+  );
 
   useEffect(() => {
     const unsubscribe = firebaseQueries.subscribeToMateriaFromId(
@@ -38,7 +41,7 @@ export default function ClaseScreen(_) {
       updateMateria
     );
     return unsubscribe;
-  }, []);
+  }, [materiaId, updateMateria]);
 
   useEffect(() => {
     if (materia) {

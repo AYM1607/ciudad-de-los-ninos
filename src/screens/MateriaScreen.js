@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useRouteMatch } from "react-router-dom";
 import { Button, FlexboxGrid, Input, Loader } from "rsuite";
 import styled from "styled-components";
@@ -29,7 +29,7 @@ export default function MateriaScreen(_) {
   const [pendingChanges, setPendingChanges] = useState(false);
   const match = useRouteMatch();
 
-  const fetchMateria = async () => {
+  const fetchMateria = useCallback(async () => {
     const materia = await firebaseQueries.getMateriaFromId(
       match.params.materiaId
     );
@@ -37,11 +37,11 @@ export default function MateriaScreen(_) {
     setClassesCount(materia.classesCount);
     setPassingAttendance(materia.passingAttendance);
     setIsLoading(false);
-  };
+  }, [match]);
 
   useEffect(() => {
     fetchMateria();
-  }, []);
+  }, [fetchMateria]);
 
   // Sets pending changes ever time the user modifies any of the inputs.
   useEffect(() => {

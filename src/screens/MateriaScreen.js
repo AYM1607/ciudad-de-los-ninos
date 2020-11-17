@@ -63,7 +63,7 @@ export default function MateriaScreen(_) {
       return;
     }
 
-    // Validate the
+    // Validate the values meet the parameters.
     if (!Number.isInteger(classesCount) || classesCount < 0) {
       alert(
         "El número de clases totales tiene que ser entero y positivo. Ejemplo: 10, 24 ó 6"
@@ -78,7 +78,38 @@ export default function MateriaScreen(_) {
       return;
     }
 
-    alert("Validation successfull");
+    if (
+      classesCount < materia.classesCount &&
+      !window.confirm(
+        "Si reduces la cantidad de clases puedes perder información de asistencia, estas seguro que deseas continuar?"
+      )
+    ) {
+      return;
+    }
+
+    const classesCopy = JSON.parse(JSON.stringify(materia.classes));
+
+    if (classesCount < materia.classesCount) {
+      await firebaseQueries.updateMateriaFromId(materia.name, {
+        passingAttendance,
+        classesCount,
+        classes: classesCopy.slice(0, classesCount),
+      });
+    } else {
+      for (let i = classesCopy.length; i < classesCount; i++) {
+        classesCopy.push({
+          attendance: [],
+          name: `Clase ${i + 1}`,
+        });
+      }
+      await firebaseQueries.updateMateriaFromId(materia.name, {
+        passingAttendance,
+        classesCount,
+        classes: classesCopy,
+      });
+    }
+
+    window.location.reload();
   };
 
   const renderButtonsRow = () => {
